@@ -41,11 +41,11 @@ public class Main {
 		ArrayList<Coord> current = new ArrayList<>();
 		current.add(start);
 		ArrayList<Coord> next = new ArrayList<>();
-		Set<Coord> passed = new HashSet<>();
+		//Set<Coord> passed = new HashSet<>();
 		int n = 1;
 		while (!current.isEmpty()) {
 			for (Coord coord:current) {
-				ArrayList<Coord> neighbours = getNeighbours(coord, map, passed);
+				ArrayList<Coord> neighbours = getNeighbours(coord, map);
 				if (neighbours==null) {
 					return n+1;
 				}
@@ -59,40 +59,41 @@ public class Main {
 		return -1;
 	}
 
-	private static ArrayList<Coord> getNeighbours(Coord coord, char[][] map, Set<Coord> passed) {
+	private static ArrayList<Coord> getNeighbours(Coord coord, char[][] map) {
 		// TODO Auto-generated method stub
 		ArrayList<Coord> neighbours = new ArrayList<>();
 		switch(map[coord.row][coord.col]) {
 		case '+':
-			if (go(coord, map, passed, -1, 0, neighbours)) 
+			if (go(coord, map, -1, 0, neighbours)) 
 				return null;
-			if (go(coord, map, passed, 0, -1, neighbours))
+			if (go(coord, map, 0, -1, neighbours))
 				return null;
-			if (go(coord, map, passed, 1, 0, neighbours))
+			if (go(coord, map, 1, 0, neighbours))
 				return null;
-			if (go(coord, map, passed, 0, 1, neighbours))
+			if (go(coord, map, 0, 1, neighbours))
 				return null;
 			break;
 		case '|':
-			if (go(coord, map, passed, -1, 0, neighbours)) 
+			if (go(coord, map, -1, 0, neighbours)) 
 				return null;
-			if (go(coord, map, passed, 1, 0, neighbours))
+			if (go(coord, map, 1, 0, neighbours))
 				return null;
 			break;
 		case '-':
-			if (go(coord, map, passed, 0, -1, neighbours))
+			if (go(coord, map, 0, -1, neighbours))
 				return null;
-			if (go(coord, map, passed, 0, 1, neighbours))
+			if (go(coord, map, 0, 1, neighbours))
 				return null;
 			break;
 		default:
 			break;
 		}
-		passed.add(coord);
+		map[coord.row][coord.col] = '*';
+		
 		return neighbours;
 	}
 
-	private static boolean go(Coord coord, char[][] map, Set<Coord> passed, int dr, int dc, ArrayList<Coord> neighbours) {
+	private static boolean go(Coord coord, char[][] map,int dr, int dc, ArrayList<Coord> neighbours) {
 		// TODO Auto-generated method stub
 		int r=coord.row+dr;
 		int c=coord.col+dc;
@@ -104,8 +105,6 @@ public class Main {
 			return true;
 		}
 		Coord newCoord = new Coord(r,c);
-		if (passed.contains(newCoord)) 
-			return false;
 		
 		neighbours.add(newCoord);
 		
